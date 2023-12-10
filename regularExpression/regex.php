@@ -22,24 +22,21 @@
     <button type="submit">Submit</button>
 </form>
 
+<!-- 驗證input內容有無符合20字元內 -->
 <script>
-function validateForm() {
-    // 获取输入值
-    var inputData = document.getElementById('inputData').value;
-
-    // 正则表达式模式，验证是否为20个字符或更少
-    var pattern = /^.{1,20}$/;
-
-    // 进行验证
-    var isInputValid = pattern.test(inputData);
-
-    // 显示验证结果
-    document.getElementById('inputDataError').innerHTML = isInputValid ? '' : 'Input must be 20 characters or less';
-
-    // 返回是否通过验证
-    return isInputValid;
-}
-</script>
+    function validateForm(){
+      //獲取輸入值      
+      let titleData = document.getElementById('titleData').value;
+      //正規表達式：驗證是否符合20字元內
+      let pattern = /^.{1,20}$/;
+      //進行驗證
+      let isTitleValid = pattern.test(titleData);
+      //顯示驗證結果
+      document.getElementById('titleDataError').innerHTML = isTitleValid ? '' : '名稱必須在20字元內';
+      //返回是否通過驗證
+      return isTitleValid;
+    }
+  </script>
 
 </body>
 </html>

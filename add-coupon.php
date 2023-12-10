@@ -12,7 +12,7 @@
   ?>
   <style>
     .input-error {
-        color: red;
+      color: red;
     }
   </style>
 
@@ -28,13 +28,14 @@
     <form action="doAddCoupon.php" method="post" id="addCouponform" onsubmit="return validateForm()">
       <div class="mb-3">
         <label for="title" class="form-label">優惠券名稱：</label>
-        <input type="text" class="form-control" id="titleData" placeholder="請輸入優惠券名稱（限20字元內）" name="title" required>
-        <span id="titleDataError" class="input-error"></span>
+        <input type="text" class="form-control validate-input" id="title" placeholder="請輸入優惠券名稱（限20字元內）" name="title" required>
+        <span id="titleError" class="input-error"></span>
       </div>
       <div class="mb-3">
         <label for="coupon_code" class="form-label">優惠券代碼：</label>
-        <input type="text" class="form-control" id="randomCouponInput" placeholder="請輸入優惠券代碼，限20字元內的數字、英文大小寫" name="coupon_code" required>
-        <h6 class="small text-secondary p-2">(可自定義20字元內的大小寫英文、數字混雜字元)</h6>
+        <input type="text" class="form-control validate-input" id="randomCouponInput" placeholder="請輸入優惠券代碼，限20字元內的數字、英文大小寫" name="coupon_code" required>
+        <span id="randomCouponInputError" class="input-error pt-1"></span>
+        <h6 class="small text-secondary p-2">(可自定義20字元內的大小寫英文、數字混雜字元)</h6>        
         <button class="btn btn-warning mb-3" onclick="generateRandomCouponCode()">隨機生成一組代碼</button>
 
         <div class="mb-3 row">
@@ -152,21 +153,35 @@
       const randomCode = generateRandomCode(20);
       // 將隨機碼產生在input框框中
       document.getElementById('randomCouponInput').value = randomCode;
-    }   
+    }
   </script>
   <!-- 驗證input內容有無符合20字元內 -->
   <script>
-    function validateForm(){
+    function validateForm() {
       //獲取輸入值
-      let titleData = document.getElementById('titleData').value;
+      let inputs = document.getElementsByClassName('validate-input');
+
       //正規表達式：驗證是否符合20字元內
       let pattern = /^.{1,20}$/;
+
       //進行驗證
-      let isTitleValid = pattern.test(titleData);
-      //顯示驗證結果
-      document.getElementById('titleDataError').innerHTML = isTitleValid ? '' : '名稱必須在20字元內';
-      //返回是否通過驗證
-      return isTitleValid;
+      for (let i = 0; i < inputs.length; i++) {
+        let inputValue = inputs[i].value;
+        let isValid = pattern.test(inputValue);
+
+        //獲得錯誤提示
+        let errorElement = document.getElementById(inputs[i].id + 'Error');
+
+        //顯示驗證結果
+        errorElement.innerHTML = isValid ? '' : '輸入內容必須在20字元內';
+
+        //如果有資料沒通過驗證，就會返回false
+        if(!isValid){
+          return false;
+        }
+      }
+      //全部都通過：返回true
+      return true;
     }
   </script>
 </body>
