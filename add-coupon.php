@@ -37,7 +37,6 @@
         <span id="randomCouponInputError" class="input-error pt-1"></span>
         <h6 class="small text-secondary p-2">(可自定義20字元內的大小寫英文、數字混雜字元)</h6>        
         <button class="btn btn-warning mb-3" onclick="generateRandomCouponCode()">隨機生成一組代碼</button>
-
         <div class="mb-3 row">
           <div class="col-6">
             <label for="discount_type" class="form-label">優惠券類型：</label>
@@ -72,6 +71,7 @@
             <label for="expiration_date" class="form-label">優惠券截止日期：</label>
             <input type="date" class="form-control" id="expiration_date" name="expiration_date" required>
           </div>
+          <span id="dateError" class="input-error pt-1"></span>
         </div>
         <div class="mb-3">
           <label for="price_rule" class="form-label">最低消費金額：</label>
@@ -155,35 +155,60 @@
       document.getElementById('randomCouponInput').value = randomCode;
     }
   </script>
-  <!-- 驗證input內容有無符合20字元內 -->
+    <!-- 驗證截止日期不會早於開始日期 -->
+    <script>
+    function validateDate(){
+      //獲得開始日期和截止日期的值
+      let startDate = document.getElementById('start_date').value;
+      let expirationDate = document.getElementById('expiration_date').value;
+      //把日期字串轉換成date
+      let startDateObj = new Date(startDate);
+      let expirationDateObj = new Date(expirationDate);
+      //清空日期錯誤訊息
+      document.getElementById('dateError').innerHTML = '';
+      //驗證截止日期是否早於開始日期
+      if (expirationDateObj < startDateObj){
+        //顯示錯誤
+        document.getElementById('dateError').innerHTML = '優惠券截止日期不可以早於開始日期';
+        return false;
+      }else{        
+        return true;
+      }
+    }    
+  </script>
+  <!-- 驗證input -->
   <script>
     function validateForm() {
-      //獲取輸入值
-      let inputs = document.getElementsByClassName('validate-input');
+      //清空所有錯誤訊息
+      let errorElements = document.getElementsByClassName('input-error');
+      for (let i=0; i<errorElements.length; i++){
+        errorElements[i].innerHTML = '';
+      }
+      //日期驗證
+      let isDateValid = validateDate();      
 
+      //獲取輸入值：：驗證是否符合20字元內
+      let inputs = document.getElementsByClassName('validate-input');      
       //正規表達式：驗證是否符合20字元內
       let pattern = /^.{1,20}$/;
-
-      //進行驗證
+      //進行驗證：驗證是否符合20字元內
       for (let i = 0; i < inputs.length; i++) {
         let inputValue = inputs[i].value;
         let isValid = pattern.test(inputValue);
-
         //獲得錯誤提示
         let errorElement = document.getElementById(inputs[i].id + 'Error');
-
         //顯示驗證結果
         errorElement.innerHTML = isValid ? '' : '輸入內容必須在20字元內';
-
         //如果有資料沒通過驗證，就會返回false
         if(!isValid){
           return false;
         }
       }
       //全部都通過：返回true
-      return true;
+      return isDateValid;
     }
   </script>
+
 </body>
 
 </html>
