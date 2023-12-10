@@ -35,7 +35,7 @@
         <label for="coupon_code" class="form-label">優惠券代碼：</label>
         <input type="text" class="form-control validate-input" id="randomCouponInput" placeholder="請輸入優惠券代碼，限20字元內的數字、英文大小寫" name="coupon_code" required>
         <span id="randomCouponInputError" class="input-error pt-1"></span>
-        <h6 class="small text-secondary p-2">(可自定義20字元內的大小寫英文、數字混雜字元)</h6>        
+        <h6 class="small text-secondary p-2">(可自定義20字元內的大小寫英文、數字混雜字元)</h6>
         <button class="btn btn-warning mb-3" onclick="generateRandomCouponCode()">隨機生成一組代碼</button>
         <div class="mb-3 row">
           <div class="col-6">
@@ -156,9 +156,9 @@
       document.getElementById('randomCouponInput').value = randomCode;
     }
   </script>
-    <!-- 驗證截止日期不會早於開始日期 -->
-    <script>
-    function validateDate(){
+  <!-- 驗證截止日期不會早於開始日期 -->
+  <script>
+    function validateDate() {
       //獲得開始日期和截止日期的值
       let startDate = document.getElementById('start_date').value;
       let expirationDate = document.getElementById('expiration_date').value;
@@ -168,28 +168,51 @@
       //清空日期錯誤訊息
       document.getElementById('dateError').innerHTML = '';
       //驗證截止日期是否早於開始日期
-      if (expirationDateObj < startDateObj){
+      if (expirationDateObj < startDateObj) {
         //顯示錯誤
         document.getElementById('dateError').innerHTML = '優惠券截止日期不可以早於開始日期';
         return false;
-      }else{        
+      } else {
         return true;
       }
-    }    
+    }
   </script>
   <!-- 驗證input -->
   <script>
-    function validateForm() {
+    function clearErrors() {
       //清空所有錯誤訊息
       let errorElements = document.getElementsByClassName('input-error');
-      for (let i=0; i<errorElements.length; i++){
+      for (let i = 0; i < errorElements.length; i++) {
         errorElements[i].innerHTML = '';
       }
-      //日期驗證
-      let isDateValid = validateDate();      
+    }
 
+    function validateDiscountValue() {
+      let discountType = document.querySelector('input[name="discount_type"]:checked').value;
+      let discountValueInput = document.getElementById('discount_value');
+      let discountValue = discountValueInput.value.trim();
+      //驗證discount_value是否為數字
+      if (!/^\d+$/.test(discountValue)) {
+        document.getElementById('discountValueError').innerHTML = '請輸入數字';
+        return false;
+      }
+      //優惠券類型為百分比時，驗證discount_value
+      if (discountType === 'percentage') {
+        discountValue = parseInt(discountValue);
+        //驗證discount_value範圍        
+        if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) {
+          document.getElementById('discountValueError').innerHTML = '請輸入有效的百分比（0-100）';
+          return false;
+        }
+      }
+      return true;
+    }
+    function validateForm() {
+      clearErrors();
+      //日期驗證
+      let isDateValid = validateDate();
       //獲取輸入值：：驗證是否符合20字元內
-      let inputs = document.getElementsByClassName('validate-input');      
+      let inputs = document.getElementsByClassName('validate-input');
       //正規表達式：驗證是否符合20字元內
       let pattern = /^.{1,20}$/;
       //進行驗證：驗證是否符合20字元內
@@ -201,35 +224,13 @@
         //顯示驗證結果
         errorElement.innerHTML = isValid ? '' : '輸入內容必須在20字元內';
         //如果有資料沒通過驗證，就會返回false
-        if(!isValid){
+        if (!isValid) {
           return false;
         }
       }
-      //優惠券類型為百分比時，驗證discount_value
-      let discountType = document.querySelector('input[name="discount_type"]:checked').value;
-      if(discountType === 'amount'){
-        let discountValueInput = document.getElementById('discount_value');
-        let discountValue = discountValueInput.value.trim();        
-        //驗證discount_value是否為數字
-        if(!/^\d+$/.test(discountValue)){
-          document.getElementById('discountValueError').innerHTML = '請輸入數字';
-          return false;
-        }
-      }
-      if(discountType === 'percentage'){
-        let discountValueInput = document.getElementById('discount_value');
-        let discountValue = discountValueInput.value.trim();        
-        //驗證discount_value是否為數字
-        if(!/^\d+$/.test(discountValue)){
-          document.getElementById('discountValueError').innerHTML = '請輸入數字';
-          return false;
-        }
-        discountValue = parseInt(discountValue);
-        //驗證discount_value範圍        
-        if (isNaN(discountValue) || discountValue <0 || discountValue > 100){
-          document.getElementById('discountValueError').innerHTML = '請輸入有效的百分比（0-100）';
-          return false;
-        }
+      
+      if(!validateDiscountValue()){
+        return false;
       }
       //全部都通過：返回true
       return isDateValid;
