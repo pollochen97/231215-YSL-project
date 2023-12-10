@@ -10,6 +10,11 @@
   <?php
   include("../ysl_project/ysl-css.php");
   ?>
+  <style>
+    .input-error {
+        color: red;
+    }
+  </style>
 
 </head>
 
@@ -20,10 +25,11 @@
       <a href="coupon-list.php" class="btn btn-warning" title="回到優惠券一覽列表"><i class="fa-solid fa-arrow-left"></i></a>
     </div>
     <!-- Add Coupon form start -->
-    <form action="doAddCoupon.php" method="post">
+    <form action="doAddCoupon.php" method="post" id="addCouponform" onsubmit="return validateForm()">
       <div class="mb-3">
         <label for="title" class="form-label">優惠券名稱：</label>
-        <input type="text" class="form-control" id="title" placeholder="請輸入優惠券名稱（限20字元內）" name="title" required>
+        <input type="text" class="form-control" id="titleData" placeholder="請輸入優惠券名稱（限20字元內）" name="title" required>
+        <span id="titleDataError" class="input-error"></span>
       </div>
       <div class="mb-3">
         <label for="coupon_code" class="form-label">優惠券代碼：</label>
@@ -146,8 +152,22 @@
       const randomCode = generateRandomCode(20);
       // 將隨機碼產生在input框框中
       document.getElementById('randomCouponInput').value = randomCode;
+    }   
+  </script>
+  <!-- 驗證input內容有無符合20字元內 -->
+  <script>
+    function validateForm(){
+      //獲取輸入值
+      let titleData = document.getElementById('titleData').value;
+      //正規表達式：驗證是否符合20字元內
+      let pattern = /^.{1,20}$/;
+      //進行驗證
+      let isTitleValid = pattern.test(titleData);
+      //顯示驗證結果
+      document.getElementById('titleDataError').innerHTML = isTitleValid ? '' : '名稱必須在20字元內';
+      //返回是否通過驗證
+      return isTitleValid;
     }
-   
   </script>
 </body>
 
