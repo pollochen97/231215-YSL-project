@@ -56,6 +56,7 @@
           <div class="col-6">
             <label for="discount_value" class="form-label">優惠券折扣百分比／折扣金額：</label>
             <input type="text" class="form-control" id="discount_value" placeholder="請輸入折扣的百分比或是折扣金額" name="discount_value" required>
+            <span id="discountValueError" class="input-error"></span>
           </div>
         </div>
         <div class="mb-3">
@@ -201,6 +202,32 @@
         errorElement.innerHTML = isValid ? '' : '輸入內容必須在20字元內';
         //如果有資料沒通過驗證，就會返回false
         if(!isValid){
+          return false;
+        }
+      }
+      //優惠券類型為百分比時，驗證discount_value
+      let discountType = document.querySelector('input[name="discount_type"]:checked').value;
+      if(discountType === 'amount'){
+        let discountValueInput = document.getElementById('discount_value');
+        let discountValue = discountValueInput.value.trim();        
+        //驗證discount_value是否為數字
+        if(!/^\d+$/.test(discountValue)){
+          document.getElementById('discountValueError').innerHTML = '請輸入數字';
+          return false;
+        }
+      }
+      if(discountType === 'percentage'){
+        let discountValueInput = document.getElementById('discount_value');
+        let discountValue = discountValueInput.value.trim();        
+        //驗證discount_value是否為數字
+        if(!/^\d+$/.test(discountValue)){
+          document.getElementById('discountValueError').innerHTML = '請輸入數字';
+          return false;
+        }
+        discountValue = parseInt(discountValue);
+        //驗證discount_value範圍        
+        if (isNaN(discountValue) || discountValue <0 || discountValue > 100){
+          document.getElementById('discountValueError').innerHTML = '請輸入有效的百分比（0-100）';
           return false;
         }
       }
