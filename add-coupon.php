@@ -61,7 +61,8 @@
         </div>
         <div class="mb-3">
           <label for="usage_times" class="form-label">可使用次數：</label>
-          <input type="text" class="form-control" id="usage_times" placeholder="請輸入可使用次數" name="usage_times" required>
+          <input type="text" class="form-control" id="usage_times" placeholder="請輸入可使用次數" name="usage_times" oninput="validateNumberInput(this)" required>
+          <span id="usage_timesError" class="input-error"></span>
         </div>
         <div class="mb-3 row">
           <div class="col-6">
@@ -76,7 +77,8 @@
         </div>
         <div class="mb-3">
           <label for="price_rule" class="form-label">最低消費金額：</label>
-          <input type="text" class="form-control" id="price_rule" placeholder="請輸入最低消費金額" name="price_rule" required>
+          <input type="text" class="form-control" id="price_rule" placeholder="請輸入最低消費金額" name="price_rule" oninput="validateNumberInput(this)" required>
+          <span id="price_ruleError" class="input-error"></span>
         </div>
         <div class="mb-3">
           <label for="applicable_scope" class="form-label">優惠券使用範圍</label>
@@ -179,6 +181,17 @@
   </script>
   <!-- 驗證input -->
   <script>
+    function validateNumberInput(inputElement){
+      let inputValue = inputElement.value.trim();
+      let errorElementId = inputElement.id + 'Error';
+      //清空錯誤訊息
+      document.getElementById(errorElementId).innerHTML='';
+
+      //驗證是否為數字
+      if(!/^\d+$/.test(inputValue)){
+        document.getElementById(errorElementId).innerHTML='請輸入數字';
+      }      
+    }
     function clearErrors() {
       //清空所有錯誤訊息
       let errorElements = document.getElementsByClassName('input-error');
@@ -209,6 +222,10 @@
     }
     function validateForm() {
       clearErrors();
+      //檢查可使用次數是否為數字
+      validateNumberInput(document.getElementById('usage_times'));
+      //檢查最低消費金額是否為數字
+      validateNumberInput(document.getElementById('price_rule'));
       //日期驗證
       let isDateValid = validateDate();
       //獲取輸入值：：驗證是否符合20字元內
