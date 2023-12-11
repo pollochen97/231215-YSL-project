@@ -13,7 +13,16 @@ $result = $conn->query($sql);
 $couponCount = $result->num_rows;
 $row = $result->fetch_assoc();
 
+//連結member_coupon
+$sqlMemberCoupon = "SELECT member_coupon.*, ysl_member.* FROM member_coupon JOIN ysl_member on member_coupon.member_id = ysl_member.id
+WHERE member_coupon.coupon_id = $id";
+$resultMemberCoupon = $conn->query($sqlMemberCoupon);
+$rowsMemberCoupon = $resultMemberCoupon->fetch_all(MYSQLI_ASSOC);
 ?>
+<pre>
+    <?php //print_r($rowsMemberCoupon); 
+    //exit;?>
+</pre>
 
 <!doctype html>
 <html lang="en">
@@ -95,7 +104,23 @@ $row = $result->fetch_assoc();
             <a href="coupon-edit.php?coupon_id=<?=$row["coupon_id"]?>" class="btn btn-warning" title="編輯優惠券"><i class="fa-solid fa-pen-to-square"></i></a>
         </div>
         <?php endif; ?>
-        <h2>擁有這張優惠券的使用者</h2> 
+        <?php 
+         $MemberCouponCount=$resultMemberCoupon->num_rows;?>
+        <h2 class="fw-bold my-3">擁有這張優惠券的使用者（共<?=$MemberCouponCount?>人）</h2>
+         <!--如果有使用者有這張優惠券才顯示-->
+         <?php          
+         if($MemberCouponCount>0): ?>
+         <div class="row g-3">
+            <?php foreach($rowsMemberCoupon as $row): ?>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                <h3><?=$row["name"]?></h3>
+                <?=$row["account"]?>
+            </div>
+            <?php endforeach; ?>
+         </div>
+         <?php else: ?>
+         使用者尚未擁有此張優惠券
+         <?php endif; ?>
     </div>
 
 
