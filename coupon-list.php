@@ -86,17 +86,17 @@ $rowsType = $resultType->fetch_all(MYSQLI_ASSOC);
               <div>
                 <?php
                 if (isset($_GET["search"])) : ?>
-                  <a href="coupon-list.php" class="btn btn-warning" title="回到優惠券列表"><i class="fa-solid fa-arrow-left"></i></a>
+                  <a href="coupon-list.php" class="btn btn-primary" title="回到優惠券列表"><i class="fa-solid fa-arrow-left"></i></a>
                   搜尋<?= $_GET["search"] ?>的結果，<?php endif; ?>
                   目前顯示<?= $couponCount ?>張優惠券（共有<?= $totalCoupon ?>張優惠券）
               </div>
-              <a href="add-coupon.php" class="btn btn-secondary" title="新增優惠券"><i class="fa-solid fa-plus pe-1"></i>新增優惠券</a>
+              <a href="add-coupon.php" class="btn btn-warning" title="新增優惠券"><i class="fa-solid fa-plus pe-1"></i>新增優惠券</a>
             </div>
             <div class="py-2">
               <form action="">
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="搜尋優惠券..." name="search">
-                  <button class="btn btn-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                  <button class="btn btn-warning" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
               </form>
             </div>
@@ -206,7 +206,7 @@ $rowsType = $resultType->fetch_all(MYSQLI_ASSOC);
                       <td><?= $row["created_at"] ?></td>
                       <td><?= $displaycouponStatus ?></td>
                       <td>
-                        <a class="btn btn-secondary" href="coupon.php?coupon_id=<?= $row["coupon_id"] ?>" title="Detail information"><i class="fa-solid fa-circle-info"></i></a>
+                        <a class="btn btn-warning" href="coupon.php?coupon_id=<?= $row["coupon_id"] ?>" title="Detail information"><i class="fa-solid fa-circle-info"></i></a>
                       </td>
                     </tr>
                   <?php endforeach; ?>
