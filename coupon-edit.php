@@ -82,9 +82,15 @@ $row = $result->fetch_assoc();
                         <!-- radio怎麼寫update -->
                         <th>折扣類型</th>
                         <td>
-                            <input type="radio" class="form-check-input" name="discount_type" value="percentage" required>
+                            <input type="radio" class="form-check-input" name="discount_type" value="percentage" 
+                            <?php
+                            if ($row["discount_type"] == 'percentage') echo "checked"                            
+                            ?>
+                            required>
                             <label for="percentage" class="form-check-label">依售價百分比折價</label>
-                            <input type="radio" class="form-check-input" name="discount_type" value="amount" required>
+                            <input type="radio" class="form-check-input" name="discount_type" value="amount" <?php
+                            if ($row["discount_type"] == 'amount') echo "checked"                            
+                            ?> required>
                             <label class="form-check-label" for="amount">
                                 依優惠金額折價
                             </label>
@@ -107,6 +113,7 @@ $row = $result->fetch_assoc();
                     <tr>
                         <th>起始日</th>
                         <td>
+                            <?php if($row["start_date"] == "user_created_at") echo "hidden"?>
                             <input type="date" class="form-control" name="start_date" id="start_date" value="<?= $row["start_date"] ?>">
                         </td>
                     </tr>
@@ -129,8 +136,13 @@ $row = $result->fetch_assoc();
                         <td>
                             <select class="form-select" aria-label="applicable_scope" name="applicable_scope" required>
                                 <option selected>請選擇優惠券使用範圍</option>
-                                <option value="global">全站</option>
-                                <option value="type">依類別</option>
+                                <option value="global" 
+                                <?php
+                                if($row["applicable_scope"] == 'global') echo "selected"
+                                ?>>全站</option>
+                                <option value="type" <?php
+                                if ($row["applicable_scope"] == 'type') echo "selected" 
+                                ?>>依類別</option>
                             </select>
                         </td>
                     </tr>
@@ -139,7 +151,9 @@ $row = $result->fetch_assoc();
                         <td>
                             <select class="form-select" aria-label="applicable_type_id" name="applicable_type_id">
                                 <option selected>請選擇優惠券使用類別</option>
-                                <option value="0">全站使用</option>
+                                <option value="0" <?php
+                                if($row["applicable_scope"] == 'global') echo "selected"
+                                ?>>全站使用</option>
                                 <option value="1">RPG</option>
                                 <option value="2">AVG</option>
                                 <option value="3">ETC</option>
@@ -158,11 +172,13 @@ $row = $result->fetch_assoc();
                     <tr>
                         <th>優惠券狀態</th>
                         <td>
-                            <input class="form-check-input" type="radio" name="status" id="status_1" value="1" required>
+                            <input class="form-check-input" type="radio" name="status" id="status_1" value="1" 
+                            <?php if($row["status"] == 1) echo "checked" ?>
+                            required>
                             <label class="form-check-label" for="status_1">
                                 可使用
                             </label>
-                            <input class="form-check-input" type="radio" name="status" id="status_0" value="0" required>
+                            <input class="form-check-input" type="radio" name="status" id="status_0" value="0" <?php if($row["status"] == 0) echo "checked" ?> required>
                             <label class="form-check-label" for="status_0">
                                 未啟用
                             </label>
