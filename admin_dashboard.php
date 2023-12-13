@@ -48,7 +48,7 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="coupon-list.php">優惠券列表</a>
                             <a class="nav-link"
-                                href="https://getbootstrap.com/docs/5.3/helpers/color-background/">新增優惠券</a>
+                                href="add-coupon.php">新增優惠券</a>
                         </nav>
                     </div>
 
